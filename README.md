@@ -2,6 +2,8 @@
 
 A collection of shell utilities for enhanced Git workflow and file searching capabilities.
 
+https://github.com/user-attachments/assets/f703c91b-f648-4ec3-b77c-c19b2d6193a2
+
 ## Setup
 
 Source the main script in your shell configuration:
