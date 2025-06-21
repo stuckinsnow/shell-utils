@@ -56,3 +56,6 @@ gfum() {
   git fetch upstream && git merge upstream/$(git show-ref --verify --quiet refs/remotes/upstream/main && echo main || echo master)
 }
 
+gn() {
+  gh notify -an 20
+}

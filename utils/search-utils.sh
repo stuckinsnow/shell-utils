@@ -1,7 +1,5 @@
 # Search file contents with ripgrep and open matching files in nvim
 # ---------------------------------------------------------------------
-# Search file contents with ripgrep and open matching files in nvim
-# ---------------------------------------------------------------------
 rgv() {
   local unique=false
   local and_search=false
