@@ -56,3 +56,31 @@ gfum() {
   git fetch upstream && git merge upstream/$(git show-ref --verify --quiet refs/remotes/upstream/main && echo main || echo master)
 }
 
+gfzf() {
+  choice=$(printf "Issues\nPRs\nNotifications" | fzf --prompt="Select: " --height=7)
+  if [[ $choice == "Issues" ]]; then
+    selected=$(gh issue list --limit 20 --state open --json number,title,state,author --template \
+      '{{range .}}{{printf "#%v [%v] %v (%v)\n" .number .state .title .author.login}}{{end}}' | \
+      fzf --ansi --preview '
+        num=$(echo {} | grep -o "#[0-9]\+" | tr -d "#")
+        gh issue view $num --comments | bat --language=markdown --style=plain --color=always
+      ')
+    if [[ -n $selected ]]; then
+      num=$(echo "$selected" | grep -o "#[0-9]\+" | tr -d "#")
+      gh issue view "$num" --comments
+    fi
+  elif [[ $choice == "PRs" ]]; then
+    selected=$(gh pr list --limit 20 --state open --json number,title,state,author --template \
+      '{{range .}}{{printf "#%v [%v] %v (%v)\n" .number .state .title .author.login}}{{end}}' | \
+      fzf --ansi --preview '
+        num=$(echo {} | grep -o "#[0-9]\+" | tr -d "#")
+        gh pr view $num --comments | bat --language=markdown --style=plain --color=always
+      ')
+    if [[ -n $selected ]]; then
+      num=$(echo "$selected" | grep -o "#[0-9]\+" | tr -d "#")
+      gh pr view "$num" --comments
+    fi
+  elif [[ $choice == "Notifications" ]]; then
+    gh notify -an 20
+  fi
+}
